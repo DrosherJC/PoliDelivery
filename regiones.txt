@@ -1,0 +1,9 @@
+Ecuador
+Ecuador:Costa
+Costa:Manabí
+Costa:Guayas
+Ecuador:Sierra
+Sierra:Pichincha
+Sierra:Loja
+Ecuador:Oriente
+
