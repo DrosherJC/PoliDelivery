@@ -5,10 +5,10 @@ ARCHIVO_CENTROS = "data/centros.txt"
 
 
 def cargar_datos():
-    adyacencia = {} # Estructura: {id_origen: [(id_destino, costo), ...]}
-    centros = {}    # Estructura: {id: nombre}
+    adyacencia = {} #{id_origen: [(id_destino, costo)}
+    centros = {}    #{id: nombre}
 
-    # 1. Cargar Centros
+    #Cargar Centros
     try:
         with open(ARCHIVO_CENTROS, "r", encoding="utf-8") as f:
             for linea in f:
@@ -23,7 +23,7 @@ def cargar_datos():
     except FileNotFoundError:
         print("Archivo centros.txt no encontrado")
 
-    # 2. Cargar Rutas
+    #Cargar Rutas
     try:
         with open(ARCHIVO_RUTAS, "r", encoding="utf-8") as f:
             for linea in f:
@@ -32,12 +32,37 @@ def cargar_datos():
                     origen, destino, distancia, costo = datos
                     costo = float(costo)
                     
-                    # Agregamos la conexión (ida y vuelta si es doble vía)
+                    # Agregar conexión
                     if origen in adyacencia:
                         adyacencia[origen].append((destino, costo))
                     if destino in adyacencia:
-                        adyacencia[destino].append((origen, costo)) # Asumimos bidireccional
+                        adyacencia[destino].append((origen, costo)) # Se asume bidireccional
     except FileNotFoundError:
         print("Archivo rutas.txt no encontrado")
         
     return adyacencia, centros
+
+# Algoritmo de Dijkstra
+def dijkstra(adyacencia, inicio, fin):
+    cola = [(0, inicio, [])] #(costo, nodo_actual, camino_recorrido)
+    visitados = set()
+    
+    while cola:
+        (costo, actual, camino) = heapq.heappop(cola)
+        
+        if actual in visitados:
+            continue
+        visitados.add(actual)
+        
+        camino = camino + [actual]
+        
+        if actual == fin:
+            return camino, costo
+        
+        # Buscar vecinos en el diccionario
+        if actual in adyacencia:
+            for (vecino, peso) in adyacencia[actual]:
+                if vecino not in visitados:
+                    heapq.heappush(cola, (costo + peso, vecino, camino))
+                    
+    return None, float('inf')
