@@ -66,3 +66,12 @@ def dijkstra(adyacencia, inicio, fin):
                     heapq.heappush(cola, (costo + peso, vecino, camino))
                     
     return None, float('inf')
+
+def mostrar_mapa(adyacencia, centros):
+    print("\n--- MAPA DE CONEXIONES ---")
+    for origen, destinos in adyacencia.items():
+        nombre_origen = centros.get(origen, "Desconocido")
+        print(f"Centro {nombre_origen} ({origen}) conecta con:")
+        for destino, costo in destinos:
+            nombre_destino = centros.get(destino, "Desconocido")
+            print(f"   -> {nombre_destino} ({destino}) [Costo: ${costo}]")
