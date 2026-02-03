@@ -3,20 +3,19 @@ import usuarios
 import grafos
 import ordenamientos
 import busquedas
-import arbol_regiones
+import arbolRegiones
 import rutas
 import sys
 
 # Variables globales para que se carguen los datos una sola vez al inicio
-datos_grafo = {}   # aqui se guardaran la adyacencia
-datos_centros = {} # aqui se guardaran los nombres de centros
-datos_arbol = {}   # aqui se guardara el árbol de regiones
+datos_grafo = {}   #guardaran la adyacencia
+datos_centros = {} #guardaran los nombres de centros
+datos_arbol = {}   #guardara el árbol de regiones
 
 def cargar_todo():
     global datos_grafo, datos_centros, datos_arbol
-    # aqui se usan las nuevas funciones sin clase
     datos_grafo, datos_centros = grafos.cargar_datos()
-    datos_arbol = arbol_regiones.construir_arbol()
+    datos_arbol = arbolRegiones.construir_arbol()
 
 #este es el menu para el administrador
 def menu_admin():
@@ -27,28 +26,35 @@ def menu_admin():
         print("3. Volver")
         opcion = input("Seleccione: ")
         
-        # lo que vamos a obtener es una lista fresca
         lista = ordenamientos.obtener_lista_centros()
         
         if opcion == "1":
-            print("1. Bubble Sort  2. Quick Sort")
-            alg = input("Algoritmo: ")
-            if alg == "1":
-                ordenada = ordenamientos.bubble_sort(lista)
-            else:
-                ordenada = ordenamientos.quick_sort(lista)
+            if not lista:
+                print("No hay centros registrados.")
+                continue
+
+            ordenada = ordenamientos.quick_sort(lista, key="nombre")
+            
+            print(f"\n{'ID':<5} | {'NOMBRE':<25} | {'REGIÓN'}")
+            print("-" * 50)
             
             for c in ordenada:
-                print(f"ID: {c['id']} | {c['nombre']} | {c['region']}")
+                print(f"{c['id']:<5} | {c['nombre']:<25} | {c['region']}")
+            
+            print("-" * 50)
+            print(f"Total: {len(ordenada)} centros.\n")
                 
         elif opcion == "2":
             nombre = input("Centro a buscar: ")
             ordenada = ordenamientos.quick_sort(lista) 
             res = busquedas.busqueda_binaria(ordenada, nombre)
             if res:
-                print(f"ENCONTRADO: {res}")
+                print(f"\nENCONTRADO:")
+                print(f"ID: {res['id']}")
+                print(f"Nombre: {res['nombre']}")
+                print(f"Región: {res['region']}\n")
             else:
-                print("No encontrado.")
+                print(f"\nEl centro '{nombre}' no existe.\n")
         elif opcion == "3":
             break
 
@@ -57,21 +63,21 @@ def menu_cliente(usuario_email):
     while True:
         print(f"\n=== MENÚ CLIENTE ({usuario_email}) ===")
         print("1. Ver mapa")
-        print("2. Cotizar envío (Dijkstra)")
+        print("2. Cotizar envío")
         print("3. Ver regiones")
         print("4. Historial")
         print("5. Volver")
         opcion = input("Seleccione: ")
         
         if opcion == "1":
-            # con lo sigueinte pasamos los diccionarios a la funcion
+            # con lo siguiente pasamos los diccionarios a la funcion
             grafos.mostrar_mapa(datos_grafo, datos_centros)
             
         elif opcion == "2":
             origen = input("ID Origen: ")
             destino = input("ID Destino: ")
             
-            # despues llamamos a dijkstra pasando el grafo (diccionario)
+            # despues llamamos a dijkstra pasando el grafo 
             camino, costo = grafos.dijkstra(datos_grafo, origen, destino)
             
             if camino:
@@ -86,7 +92,7 @@ def menu_cliente(usuario_email):
                 print("Ruta no encontrada.")
                 
         elif opcion == "3":
-            arbol_regiones.mostrar_jerarquia(datos_arbol)
+            arbolRegiones.mostrar_jerarquia(datos_arbol)
             
         elif opcion == "4":
             rutas.ver_historial()
