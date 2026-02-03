@@ -67,11 +67,21 @@ def dijkstra(adyacencia, inicio, fin):
                     
     return None, float('inf')
 
-def mostrar_mapa(adyacencia, centros):
-    print("\n--- MAPA DE CONEXIONES ---")
-    for origen, destinos in adyacencia.items():
-        nombre_origen = centros.get(origen, "Desconocido")
-        print(f"Centro {nombre_origen} ({origen}) conecta con:")
-        for destino, costo in destinos:
-            nombre_destino = centros.get(destino, "Desconocido")
-            print(f"   -> {nombre_destino} ({destino}) [Costo: ${costo}]")
+def mostrar_mapa(grafo, datos_centros):
+    print("\n--- RED DE DISTRIBUCIÓN (CONEXIONES) ---")
+    
+    for origen_id, conexiones in grafo.items():
+        nombre_origen = datos_centros.get(origen_id, f"ID {origen_id}")
+        
+        print(f"\n📍 {nombre_origen} (ID: {origen_id})")
+        
+        total_conexiones = len(conexiones)
+        for i, (destino_id, costo) in enumerate(conexiones):
+            nombre_destino = datos_centros.get(destino_id, f"ID {destino_id}")
+            
+            if i == total_conexiones - 1:
+                prefijo = "   └──"
+            else:
+                prefijo = "   ├──"
+                
+            print(f"{prefijo} 🚚 Hacia: {nombre_destino:<15} [${costo}]")
