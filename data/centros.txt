@@ -1,0 +1,5 @@
+1,CentroNorte,Pichincha,Quito
+2,CentroSur,Pichincha,Quito
+3,AlmacenValle,Pichincha,Cumbaya
+4,BodegaCosta,Guayas,Guayaquil
+5,PuertoPrincipal,Guayas,Guayaquil
