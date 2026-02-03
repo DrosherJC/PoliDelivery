@@ -21,41 +21,41 @@ def cargar_todo():
 def menu_admin():
     while True:
         print("\n=== MENÚ ADMINISTRADOR ===")
-        print("1. Listar Centros (Ordenados)")
+        print("1. Listar Centros (A-Z)")
         print("2. Buscar Centro")
-        print("3. Volver")
+        print("3. Ver Reporte Global (Ventas)")
+        print("4. Volver")
         opcion = input("Seleccione: ")
         
         lista = ordenamientos.obtener_lista_centros()
         
         if opcion == "1":
             if not lista:
-                print("No hay centros registrados.")
+                print("⚠️ No hay centros registrados.")
                 continue
-
+            # Ordenamos automáticamente con QuickSort
             ordenada = ordenamientos.quick_sort(lista, key="nombre")
             
             print(f"\n{'ID':<5} | {'NOMBRE':<25} | {'REGIÓN'}")
             print("-" * 50)
-            
             for c in ordenada:
                 print(f"{c['id']:<5} | {c['nombre']:<25} | {c['region']}")
-            
             print("-" * 50)
-            print(f"Total: {len(ordenada)} centros.\n")
                 
         elif opcion == "2":
             nombre = input("Centro a buscar: ")
             ordenada = ordenamientos.quick_sort(lista) 
             res = busquedas.busqueda_binaria(ordenada, nombre)
             if res:
-                print(f"\nENCONTRADO:")
-                print(f"ID: {res['id']}")
-                print(f"Nombre: {res['nombre']}")
-                print(f"Región: {res['region']}\n")
+                print(f"\n✅ ENCONTRADO: {res['nombre']} ({res['region']})")
+                rutas.ver_envios_por_centro(res['nombre'])
             else:
-                print(f"\nEl centro '{nombre}' no existe.\n")
+                print(f"\n❌ No encontrado.")
+
         elif opcion == "3":
+            rutas.ver_reporte_general()
+
+        elif opcion == "4":
             break
 
 #este es el menu para el cliente
