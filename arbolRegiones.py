@@ -39,11 +39,22 @@ def construir_arbol():
 
     return raiz
 
+def mostrar_jerarquia(nodo, prefijo="", es_ultimo=True, es_raiz=True):
+    if es_raiz:
+        print(f"🌎 {nodo['valor']}")
+        nuevo_prefijo = ""
+    else:
+        conector = "└── " if es_ultimo else "├──"
+        icono = "📍 " if not nodo["hijos"] else "🏳️  " 
+        print(f"{prefijo}{conector}{icono}{nodo['valor']}")
+        nuevo_prefijo = prefijo + ("    " if es_ultimo else "│   ")
 
-# Muestra el árbol con sangría según el nivel
-def mostrar_jerarquia(nodo, nivel=0):
-    print("  " * nivel + "- " + nodo["valor"])
-
-    # Recorre e imprime cada hijo del nodo
-    for hijo in nodo["hijos"]:
-        mostrar_jerarquia(hijo, nivel + 1)
+    #Recorrer los hijos
+    hijos = nodo["hijos"]
+    cantidad_hijos = len(hijos)
+    
+    for i, hijo in enumerate(hijos):
+        # Verificamos si el hijo actual es el último de la lista
+        es_ultimo_hijo = (i == cantidad_hijos - 1)
+        
+        mostrar_jerarquia(hijo, nuevo_prefijo, es_ultimo_hijo, es_raiz=False)
